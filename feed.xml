@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>/joeally</title>
+    <description>My adventures of programming and computer science</description>
+    <link>http://joeally.github.io//</link>
+    <atom:link href="http://joeally.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>My First Post</title>
+        <description>&lt;p&gt;I started this blog mainly to document my explorations into various topics within the areas of programming and computer science as a kind of a record of my extra-curricular activities.&lt;/p&gt;
+
+&lt;p&gt;Coming soon is a series on generating (vaguely) plausible random text based on Markov chains using &lt;a href=&quot;http://www.clojure.org&quot;&gt;Clojure&lt;/a&gt;. In the series I’ll also talk about using the &lt;a href=&quot;http://redis.io/&quot;&gt;redis&lt;/a&gt; key-value store and creating a web application to serve up the random text. I may also post about &lt;a href=&quot;http//www.clojure.org/clojurescript&quot;&gt;ClojureScript&lt;/a&gt; in conjunction with the web stuff.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 28 Jun 2014 13:00:00 +0100</pubDate>
+        <link>http://joeally.github.io//jekyll/update/2014/06/28/my-first-post/</link>
+        <guid isPermaLink="true">http://joeally.github.io//jekyll/update/2014/06/28/my-first-post/</guid>
+      </item>
+    
+  </channel>
+</rss>
