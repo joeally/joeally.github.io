@@ -8,7 +8,7 @@
     
       <item>
         <title>Random Text with Markov Chains in Clojure</title>
-        <description>&lt;p&gt;In my previous post gave a brief introduction behind the theory of generating random text using markov chains. In this post I outline how I implemented this in Clojure.&lt;/p&gt;
+        <description>&lt;p&gt;In my &lt;a href=&quot;/clojure/programming/2014/06/29/random-text-with-markov-chains/&quot;&gt;previous&lt;/a&gt; post I gave a brief introduction behind the theory of generating random text using Markov chains. In this post I outline how I implemented this in Clojure.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-input&quot;&gt;The Input&lt;/h2&gt;
 &lt;p&gt;The inputs in this particular example will be a collection of sequences. In this particular blog post In each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. &lt;/p&gt;
@@ -35,7 +35,7 @@
  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;all&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;generalizations&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;are&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;false&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;including&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;this&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;one&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;building-the-transition-table&quot;&gt;Building the Transition Table&lt;/h2&gt;
-&lt;p&gt;From the previous post you’ll recall that to build any kind of Markov chain a tranistion table is required. Clojure has a very powerful builtin persistant map type which excels in situations such as these. The keys will represent what we are transitioning from and the values will be what we are transitioning to. To enable markov chains with &lt;script type=&quot;math/tex&quot;&gt;n &gt; 1&lt;/script&gt;, the keys of the map will be vectors of length &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt;.
+&lt;p&gt;From the previous post you’ll recall that to build any kind of Markov chain a tranistion table is required. Clojure has a very powerful builtin persistant map type which excels in situations such as these. The keys will represent what we are transitioning from and the values will be what we are transitioning to. To enable Markov chains with &lt;script type=&quot;math/tex&quot;&gt;n &gt; 1&lt;/script&gt;, the keys of the map will be vectors of length &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt;.
 In the previous post I mentioned that the values of the map would be lists of words. As we do not need any notion of ordering we can store this list more efficiently as a map of words to the number of times they were transitioned to. Otherwise known as a &lt;em&gt;bag-of-words&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;The transition table for &lt;script type=&quot;math/tex&quot;&gt;n = 2&lt;/script&gt; for the following sequence&lt;/p&gt;

@@ -63,7 +63,7 @@
   </header>
 
   <article class="post-content">
-  <p>In my previous post gave a brief introduction behind the theory of generating random text using markov chains. In this post I outline how I implemented this in Clojure.</p>
+  <p>In my <a href="/clojure/programming/2014/06/29/random-text-with-markov-chains/">previous</a> post I gave a brief introduction behind the theory of generating random text using Markov chains. In this post I outline how I implemented this in Clojure.</p>
 
 <h2 id="the-input">The Input</h2>
 <p>The inputs in this particular example will be a collection of sequences. In this particular blog post In each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. </p>
@@ -90,7 +90,7 @@
  <span class="p">[</span><span class="s">&quot;all&quot;</span> <span class="s">&quot;generalizations&quot;</span> <span class="s">&quot;are&quot;</span> <span class="s">&quot;false&quot;</span> <span class="s">&quot;,&quot;</span> <span class="s">&quot;including&quot;</span> <span class="s">&quot;this&quot;</span> <span class="s">&quot;one&quot;</span> <span class="s">&quot;.&quot;</span><span class="p">])</span></code></pre></div>
 
 <h2 id="building-the-transition-table">Building the Transition Table</h2>
-<p>From the previous post you’ll recall that to build any kind of Markov chain a tranistion table is required. Clojure has a very powerful builtin persistant map type which excels in situations such as these. The keys will represent what we are transitioning from and the values will be what we are transitioning to. To enable markov chains with <script type="math/tex">n > 1</script>, the keys of the map will be vectors of length <script type="math/tex">n</script>.
+<p>From the previous post you’ll recall that to build any kind of Markov chain a tranistion table is required. Clojure has a very powerful builtin persistant map type which excels in situations such as these. The keys will represent what we are transitioning from and the values will be what we are transitioning to. To enable Markov chains with <script type="math/tex">n > 1</script>, the keys of the map will be vectors of length <script type="math/tex">n</script>.
 In the previous post I mentioned that the values of the map would be lists of words. As we do not need any notion of ordering we can store this list more efficiently as a map of words to the number of times they were transitioned to. Otherwise known as a <em>bag-of-words</em>.</p>
 
 <p>The transition table for <script type="math/tex">n = 2</script> for the following sequence</p>
