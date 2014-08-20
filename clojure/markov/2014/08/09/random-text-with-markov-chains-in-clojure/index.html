@@ -66,9 +66,9 @@
   <p>In my previous post gave a brief introduction behind the theory of generating random text using markov chains. In this post I outline how I implemented this in Clojure.</p>
 
 <h2 id="the-input">The Input</h2>
-<p>The inputs in this particular example will be a collection of sequences. In this particular blog post I each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. </p>
+<p>The inputs in this particular example will be a collection of sequences. In this particular blog post In each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. </p>
 
-<p>However it is difficult to collections of sequences of words. It is more common to find a corpus of documents similar to the corpus shown below (in Clojure a data structure).</p>
+<p>However it is difficult to collect of very sequences of words. It is more common to find a corpus of documents similar to the corpus shown below (in Clojure a data structure).</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;To succeed in life, you need two things: ignorance and confidence&quot;</span>
   <span class="s">&quot;The secret of getting ahead is getting started&quot;</span>
@@ -83,7 +83,7 @@
          <span class="p">(</span><span class="nf">clojure.string/replace</span> <span class="o">#</span><span class="s">&quot;[\.,?:;]&quot;</span> <span class="o">#</span><span class="p">(</span><span class="nf">clojure.string/join</span> <span class="p">[</span><span class="s">&quot; &quot;</span> <span class="p">(</span><span class="nb">str </span><span class="nv">%</span><span class="p">)]))</span>
          <span class="p">(</span><span class="nf">clojure.string/split</span> <span class="o">#</span><span class="s">&quot; &quot;</span><span class="p">))))</span></code></pre></div>
 
-<p>This function converts the corpus shown previously into the following clojure datastructure:</p>
+<p>This function converts the corpus shown previously into the following Clojure data structure:</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">([</span><span class="s">&quot;to&quot;</span> <span class="s">&quot;succeed&quot;</span> <span class="s">&quot;in&quot;</span> <span class="s">&quot;life&quot;</span> <span class="s">&quot;,&quot;</span> <span class="s">&quot;you&quot;</span> <span class="s">&quot;need&quot;</span> <span class="s">&quot;two&quot;</span> <span class="s">&quot;things&quot;</span> <span class="s">&quot;:&quot;</span> <span class="s">&quot;ignorance&quot;</span> <span class="s">&quot;and&quot;</span> <span class="s">&quot;confidence&quot;</span><span class="p">]</span>
  <span class="p">[</span><span class="s">&quot;the&quot;</span> <span class="s">&quot;secret&quot;</span> <span class="s">&quot;of&quot;</span> <span class="s">&quot;getting&quot;</span> <span class="s">&quot;ahead&quot;</span> <span class="s">&quot;is&quot;</span> <span class="s">&quot;getting&quot;</span> <span class="s">&quot;started&quot;</span><span class="p">]</span>
@@ -171,7 +171,7 @@ In the previous post I mentioned that the values of the map would be lists of wo
    <span class="nv">first</span>
    <span class="p">(</span><span class="nf">iterate</span>
     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">prev</span><span class="p">]</span>
-      <span class="c1">;;j</span>
+      <span class="c1">;;return a sequence of all except the first value in the previous result and the next in the sequence</span>
       <span class="p">(</span><span class="nb">conj </span><span class="p">(</span><span class="nf">vec</span> <span class="p">(</span><span class="nb">drop </span><span class="mi">1</span> <span class="nv">prev</span><span class="p">))</span> <span class="p">(</span><span class="nf">tt/rand-next</span> <span class="nv">trans-tbl</span> <span class="nv">prev</span><span class="p">)))</span>
     <span class="nv">prev</span><span class="p">)))</span></code></pre></div>
 
