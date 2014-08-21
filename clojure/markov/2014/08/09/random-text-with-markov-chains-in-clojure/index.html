@@ -114,7 +114,7 @@ In the previous post I mentioned that the values of the map would be lists of wo
 <p>The function which produces this result is as follows:</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">collect-transitions</span>
-  <span class="p">([</span><span class="nv">seqn</span> <span class="nv">n</span><span class="p">]</span>
+  <span class="p">([</span><span class="nv">seqn</span> <span class="nv">n</span><span class="p">]</span> <span class="c1">;; The n argument represents the value of n for the Markov chain we are generating the table for</span>
      <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">seqn</span>
           <span class="c1">;;split sequence into overlapping sequences of n+1</span>
           <span class="p">(</span><span class="nf">partition</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
@@ -162,8 +162,16 @@ In the previous post I mentioned that the values of the map would be lists of wo
 
 <p>One can see that the function is defined as part of a Clojure <a href="http://clojure.org/protocols">protocol</a>. This will allow me to easily specify another implementation should I wish to.</p>
 
-<h2 id="generating-the-sequence">Generating the Sequence</h2>
+<p>For the case when we want to build a transition table for a whole corpus I have written the function below. The concat-tt function is used to combine the transitions from two transition tables in to a single one.</p>
 
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">corpus-transitions</span>
+  <span class="p">([</span><span class="nv">corpus</span><span class="p">]</span> <span class="p">(</span><span class="nf">corpus-transitions</span> <span class="nv">corpus</span> <span class="mi">1</span><span class="p">))</span>
+  <span class="p">([</span><span class="nv">corpus</span> <span class="nv">n</span><span class="p">]</span>
+     <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">corpus</span>
+          <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nf">collect-transitions</span> <span class="nv">%</span> <span class="nv">n</span><span class="p">))</span>
+          <span class="p">(</span><span class="nb">reduce </span><span class="nv">tt/concat-tt</span><span class="p">))))</span></code></pre></div>
+
+<h2 id="generating-the-sequence">Generating the Sequence</h2>
 <p>Now we are able to build a transition table we can now generate our sequences of tokens.  </p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">quite-likely-seq</span> <span class="p">[</span><span class="nv">prev</span> <span class="nv">trans-tbl</span> <span class="nv">n</span><span class="p">]</span>
