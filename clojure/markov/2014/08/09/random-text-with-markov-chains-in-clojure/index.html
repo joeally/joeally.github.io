@@ -172,7 +172,7 @@ In the previous post I mentioned that the values of the map would be lists of wo
           <span class="p">(</span><span class="nb">reduce </span><span class="nv">tt/concat-tt</span><span class="p">))))</span></code></pre></div>
 
 <h2 id="generating-the-sequence">Generating the Sequence</h2>
-<p>Now we’ve built the transition table we can now generate our sequences of tokens. In addition to the transition table, the below function takes a vector of first <script type="math/tex">n</script> tokens for the sequence from which we can generate the subsequent items in the sequence using the transition table.</p>
+<p>Now we’ve built the transition table we can now generate our sequences of tokens. In addition to the transition table, the below function takes a vector of first <script type="math/tex">n</script> tokens for the sequence (the initialization sequence) from which we can generate the subsequent items in the sequence using the transition table.</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">quite-likely-seq</span> <span class="p">[</span><span class="nv">fst</span> <span class="nv">trans-tbl</span><span class="p">]</span>
   <span class="p">(</span><span class="nf">map</span>
@@ -197,6 +197,13 @@ In the previous post I mentioned that the values of the map would be lists of wo
 
 <div class="highlight"><pre><code class="clojure"><span class="c1">;;tn represents the nth token in the randomly generated sequence</span>
 <span class="nv">t0</span> <span class="nv">t1</span> <span class="nv">t2</span> <span class="nv">t3</span> <span class="nv">...</span></code></pre></div>
+
+<p>We can then create the following convenience function that takes a corpus and generates a sequence (rather than taking a transition table and an initialization sequence).</p>
+
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">corpus-likely-seq</span> <span class="p">[</span><span class="nv">corpus</span> <span class="nv">n</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">transitions</span> <span class="p">(</span><span class="nf">corpus-transitions</span> <span class="p">(</span><span class="nf">process-corpus</span> <span class="nv">corpus</span><span class="p">)</span> <span class="nv">n</span><span class="p">)]</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">start</span> <span class="p">(</span><span class="nf">rand-nth</span> <span class="p">(</span><span class="nf">vec</span> <span class="p">(</span><span class="nb">keys </span><span class="nv">transitions</span><span class="p">)))]</span>
+      <span class="p">(</span><span class="nf">quite-likely-seq</span> <span class="nv">start</span> <span class="nv">transitions</span><span class="p">))))</span></code></pre></div>
 
 <p>In the next blog post I’ll talk about scrapping some data from reddit and generating some random sequences using it.</p>
 
