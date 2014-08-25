@@ -68,7 +68,7 @@
 <h2 id="the-input">The Input</h2>
 <p>The inputs in this particular example will be a collection of sequences. In this blog post, each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. </p>
 
-<p>Howevever, rather than using a single document to build our random sequence generator we will use a corpus of documents. That way we can continuously improve our random sequence generator. An example of such a corpus is shown below (in a Clojure data structure).</p>
+<p>Howevever, rather than using a single document to build our random sequence generator we will use a corpus of documents. That way we can continuously improve our random sequence generator by adding the transitions from more documents to our transition table. An example of such a corpus is shown below (in a Clojure data structure).</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;To succeed in life, you need two things: ignorance and confidence&quot;</span>
   <span class="s">&quot;The secret of getting ahead is getting started&quot;</span>

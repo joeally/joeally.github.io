@@ -13,7 +13,7 @@
 &lt;h2 id=&quot;the-input&quot;&gt;The Input&lt;/h2&gt;
 &lt;p&gt;The inputs in this particular example will be a collection of sequences. In this blog post, each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. &lt;/p&gt;
 
-&lt;p&gt;Howevever, rather than using a single document to build our random sequence generator we will use a corpus of documents. That way we can continuously improve our random sequence generator. An example of such a corpus is shown below (in a Clojure data structure).&lt;/p&gt;
+&lt;p&gt;Howevever, rather than using a single document to build our random sequence generator we will use a corpus of documents. That way we can continuously improve our random sequence generator by adding the transitions from more documents to our transition table. An example of such a corpus is shown below (in a Clojure data structure).&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;clojure&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;To succeed in life, you need two things: ignorance and confidence&amp;quot;&lt;/span&gt;
   &lt;span class=&quot;s&quot;&gt;&amp;quot;The secret of getting ahead is getting started&amp;quot;&lt;/span&gt;
