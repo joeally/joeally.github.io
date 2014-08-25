@@ -66,9 +66,9 @@
   <p>In my <a href="/clojure/programming/2014/06/29/random-text-with-markov-chains/">previous</a> post I gave a brief introduction behind the theory of generating random text using Markov chains. In this post I outline how I implemented this in Clojure.</p>
 
 <h2 id="the-input">The Input</h2>
-<p>The inputs in this particular example will be a collection of sequences. In this particular blog post In each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. </p>
+<p>The inputs in this particular example will be a collection of sequences. In this blog post, each item in a particular sequence will be a string representing a word. But there is no reason why any type of symbol could not be used instead. </p>
 
-<p>However it is difficult to collect of very sequences of words. It is more common to find a corpus of documents similar to the corpus shown below (in Clojure a data structure).</p>
+<p>Howevever, rather than using a single document to build our random sequence generator we will use a corpus of documents. That way we can continuously improve our random sequence generator. An example of such a corpus is shown below (in a Clojure data structure).</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;To succeed in life, you need two things: ignorance and confidence&quot;</span>
   <span class="s">&quot;The secret of getting ahead is getting started&quot;</span>
@@ -124,7 +124,7 @@ In the previous post I mentioned that the values of the map would be lists of wo
           <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">tt</span> <span class="p">[</span><span class="nv">from</span> <span class="nv">to</span><span class="p">]]</span> <span class="p">(</span><span class="nf">tt/add-transition</span> <span class="nv">tt</span> <span class="nv">from</span> <span class="nv">to</span><span class="p">))</span> <span class="p">{})))</span>
   <span class="p">([</span><span class="nv">seqn</span><span class="p">]</span> <span class="p">(</span><span class="nf">collect-transitions</span> <span class="nv">seqn</span> <span class="mi">1</span><span class="p">))</span></code></pre></div>
 
-<p>Above you can see the tt/add-transition function which I have not defined yet. This function simply adds a transition to the transition table. The “from” argument is the token being transitioned from and the “to” argument is the token being transitioned to. “tt” is the namespace I am importing the package containing this function under. Below is the file in which the “add-transition” function is defined:</p>
+<p>Above you can see the tt/add-transition function which I have not defined yet. This function simply adds a transition to the transition table. The “from” argument is the token being transitioned from and the “to” argument is the token being transitioned to. “tt” is the namespace given to the pacakge in which the helper functions for the transition table are defined. Below is the file in which the “add-transition” function is defined.</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">markovtext.transitiontable</span>
   <span class="p">(</span><span class="ss">:gen-class</span><span class="p">))</span>
@@ -172,16 +172,16 @@ In the previous post I mentioned that the values of the map would be lists of wo
           <span class="p">(</span><span class="nb">reduce </span><span class="nv">tt/concat-tt</span><span class="p">))))</span></code></pre></div>
 
 <h2 id="generating-the-sequence">Generating the Sequence</h2>
-<p>Now we are able to build a transition table we can now generate our sequences of tokens.  </p>
+<p>Now we’ve built the transition table we can now generate our sequences of tokens. In addition to the transition table, the below function takes a vector of first <script type="math/tex">n</script> tokens for the sequence from which we can generate the subsequent items in the sequence using the transition table.</p>
 
-<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">quite-likely-seq</span> <span class="p">[</span><span class="nv">prev</span> <span class="nv">trans-tbl</span> <span class="nv">n</span><span class="p">]</span>
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">quite-likely-seq</span> <span class="p">[</span><span class="nv">fst</span> <span class="nv">trans-tbl</span><span class="p">]</span>
   <span class="p">(</span><span class="nf">map</span>
    <span class="nv">first</span>
    <span class="p">(</span><span class="nf">iterate</span>
     <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">prev</span><span class="p">]</span>
       <span class="c1">;;return a sequence of all except the first value in the previous result and the next in the sequence</span>
       <span class="p">(</span><span class="nb">conj </span><span class="p">(</span><span class="nf">vec</span> <span class="p">(</span><span class="nb">drop </span><span class="mi">1</span> <span class="nv">prev</span><span class="p">))</span> <span class="p">(</span><span class="nf">tt/rand-next</span> <span class="nv">trans-tbl</span> <span class="nv">prev</span><span class="p">)))</span>
-    <span class="nv">prev</span><span class="p">)))</span></code></pre></div>
+    <span class="nv">fst</span><span class="p">)))</span></code></pre></div>
 
 <p>We are using the <a href="http://clojuredocs.org/clojure_core/clojure.core/iterate">iterate</a> function to generate a lazy sequence of from part of the transitions. That is it will generate sequence of pairs in the following form if <script type="math/tex">n=2</script></p>
 
