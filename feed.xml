@@ -126,8 +126,8 @@
 &lt;p&gt;In the next blog post I will look at continually updating the transition table and storing them in a &lt;a href=&quot;http://redis.io/&quot;&gt;redis&lt;/a&gt; key-value store to allow us to better scale things up.&lt;/p&gt;
 </description>
         <pubDate>Fri, 29 Aug 2014 13:00:00 +0100</pubDate>
-        <link>http://joeally.github.io//clojure/markov/reddit/2014/08/29/geting-test-corpuses-from-reddit/</link>
-        <guid isPermaLink="true">http://joeally.github.io//clojure/markov/reddit/2014/08/29/geting-test-corpuses-from-reddit/</guid>
+        <link>http://joeally.github.io//clojure/markov/reddit/2014/08/29/getting-test-corpuses-from-reddit/</link>
+        <guid isPermaLink="true">http://joeally.github.io//clojure/markov/reddit/2014/08/29/getting-test-corpuses-from-reddit/</guid>
       </item>
     
       <item>
