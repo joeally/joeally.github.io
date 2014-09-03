@@ -95,7 +95,7 @@ In the previous post I mentioned that the values of the map would be lists of wo
 
 <p>The transition table for <script type="math/tex">n = 2</script> for the following sequence</p>
 
-<div class="highlight"><pre><code class="clojure"><span class="p">[</span><span class="s">&quot;to&quot;</span> <span class="s">&quot;succeed&quot;</span> <span class="s">&quot;in&quot;</span> <span class="s">&quot;life&quot;</span> <span class="s">&quot;,&quot;</span> <span class="s">&quot;you&quot;</span> <span class="s">&quot;need&quot;</span> <span class="s">&quot;two&quot;</span> <span class="s">&quot;things&quot;</span> <span class="s">&quot;:&quot;</span> <span class="s">&quot;ignorance&quot;</span> <span class="s">&quot;and&quot;</span> <span class="s">&quot;confidence&quot;</span><span class="p">]</span></code></pre></div>
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">sentence-seq</span> <span class="p">[</span><span class="s">&quot;to&quot;</span> <span class="s">&quot;succeed&quot;</span> <span class="s">&quot;in&quot;</span> <span class="s">&quot;life&quot;</span> <span class="s">&quot;,&quot;</span> <span class="s">&quot;you&quot;</span> <span class="s">&quot;need&quot;</span> <span class="s">&quot;two&quot;</span> <span class="s">&quot;things&quot;</span> <span class="s">&quot;:&quot;</span> <span class="s">&quot;ignorance&quot;</span> <span class="s">&quot;and&quot;</span> <span class="s">&quot;confidence&quot;</span><span class="p">])</span></code></pre></div>
 
 <p>can be seen below.</p>
 
@@ -111,20 +111,23 @@ In the previous post I mentioned that the values of the map would be lists of wo
  <span class="p">[</span><span class="s">&quot;things&quot;</span> <span class="s">&quot;:&quot;</span><span class="p">]</span> <span class="p">{</span><span class="s">&quot;ignorance&quot;</span> <span class="mi">1</span><span class="p">}</span>,
  <span class="p">[</span><span class="s">&quot;to&quot;</span> <span class="s">&quot;succeed&quot;</span><span class="p">]</span> <span class="p">{</span><span class="s">&quot;in&quot;</span> <span class="mi">1</span><span class="p">}}</span></code></pre></div>
 
-<p>The function which produces this result is as follows:</p>
+<p>One can achieve this result by collecting the transitions using <code>col-transitions</code> and converting them into a transition table using <code>make-transition-table</code>. The two functions are shown below with an example of how they would typically be composed.</p>
 
-<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">collect-transitions</span>
-  <span class="p">([</span><span class="nv">seqn</span> <span class="nv">n</span><span class="p">]</span> <span class="c1">;; The n argument represents the value of n for the Markov chain we are generating the table for</span>
-     <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">seqn</span>
-          <span class="c1">;;split sequence into overlapping sequences of n+1</span>
-          <span class="p">(</span><span class="nf">partition</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
-          <span class="c1">;;convert these sequnces into vector in the form [fromvec to]</span>
-          <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">part</span><span class="p">]</span> <span class="p">[(</span><span class="nf">vec</span> <span class="p">(</span><span class="nb">take </span><span class="nv">n</span> <span class="nv">part</span><span class="p">))</span> <span class="p">(</span><span class="nb">last </span><span class="nv">part</span><span class="p">)]))</span>
-          <span class="c1">;;collect transition vectors into a map</span>
-          <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">tt</span> <span class="p">[</span><span class="nv">from</span> <span class="nv">to</span><span class="p">]]</span> <span class="p">(</span><span class="nf">tt/add-transition</span> <span class="nv">tt</span> <span class="nv">from</span> <span class="nv">to</span><span class="p">))</span> <span class="p">{})))</span>
-  <span class="p">([</span><span class="nv">seqn</span><span class="p">]</span> <span class="p">(</span><span class="nf">collect-transitions</span> <span class="nv">seqn</span> <span class="mi">1</span><span class="p">))</span></code></pre></div>
+<div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">col-transitions</span> <span class="p">[</span><span class="nv">seqn</span> <span class="nv">n</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">partition</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n</span><span class="p">)</span> <span class="mi">1</span> <span class="nv">seqn</span><span class="p">))</span>
 
-<p>Above you can see the tt/add-transition function which I have not defined yet. This function simply adds a transition to the transition table. The “from” argument is the token being transitioned from and the “to” argument is the token being transitioned to. “tt” is the namespace given to the pacakge in which the helper functions for the transition table are defined. Below is the file in which the “add-transition” function is defined.</p>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">make-transition-table</span> <span class="p">[</span><span class="nv">transitions</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">transitions</span>
+      <span class="c1">;;convert transition to [from-vec to-symbol] pairs</span>
+      <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">part</span><span class="p">]</span> <span class="p">[(</span><span class="nf">vec</span> <span class="p">(</span><span class="nb">take </span><span class="p">(</span><span class="nb">dec </span><span class="p">(</span><span class="nb">count </span><span class="nv">part</span><span class="p">))</span> <span class="nv">part</span><span class="p">))</span> <span class="p">(</span><span class="nb">last </span><span class="nv">part</span><span class="p">)]))</span>
+      <span class="c1">;;collect transition vectors into a map</span>
+      <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">tt</span> <span class="p">[</span><span class="nv">from</span> <span class="nv">to</span><span class="p">]]</span> <span class="p">(</span><span class="nf">tt/add-transition</span> <span class="nv">tt</span> <span class="nv">from</span> <span class="nv">to</span><span class="p">))</span> <span class="p">{})))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">transiton-table</span> 
+ <span class="p">(</span><span class="nf">make-transition-table</span> 
+   <span class="p">(</span><span class="nf">col-transitions</span> <span class="nv">sentence-seq</span> <span class="mi">2</span><span class="p">)))</span></code></pre></div>
+
+<p>Above you can see the tt/add-transition function which I have not defined yet. This function simply adds a transition to the transition table. The <code>from</code> argument is the token being transitioned from and the <code>to</code> argument is the token being transitioned to. <code>tt</code> is the namespace given to the pacakge in which the helper functions for the transition table are defined. Below is the file in which the <code>add-transition</code> function is defined.</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">markovtext.transitiontable</span>
   <span class="p">(</span><span class="ss">:gen-class</span><span class="p">))</span>
@@ -149,9 +152,6 @@ In the previous post I mentioned that the values of the map would be lists of wo
   <span class="p">(</span><span class="nf">add-transition-vec</span> <span class="p">[</span><span class="nv">tt</span> <span class="nv">from</span> <span class="nv">to-vec</span><span class="p">]</span>
     <span class="p">(</span><span class="nb">reduce </span><span class="o">#</span><span class="p">(</span><span class="nf">add-transition</span> <span class="nv">%1</span> <span class="nv">from</span> <span class="nv">%2</span><span class="p">)</span> <span class="nv">tt</span> <span class="nv">to-vec</span><span class="p">))</span>
 
-  <span class="p">(</span><span class="nf">concat-tt</span> <span class="p">[</span><span class="nv">tt1</span> <span class="nv">tt2</span><span class="p">]</span>
-    <span class="p">(</span><span class="nb">merge-with </span><span class="nv">concat-bag</span> <span class="nv">tt1</span> <span class="nv">tt2</span><span class="p">))</span>
-
   <span class="p">(</span><span class="nf">rand-first</span> <span class="p">[</span><span class="nv">tt</span><span class="p">]</span>
     <span class="p">(</span><span class="nf">rand-nth</span> <span class="p">(</span><span class="nb">keys </span><span class="nv">tt</span><span class="p">)))</span>
 
@@ -162,14 +162,15 @@ In the previous post I mentioned that the values of the map would be lists of wo
 
 <p>One can see that the function is defined as part of a Clojure <a href="http://clojure.org/protocols">protocol</a>. This will allow me to easily specify another implementation should I wish to.</p>
 
-<p>For the case when we want to build a transition table for a whole corpus I have written the function below. The concat-tt function is used to combine the transitions from two transition tables in to a single one.</p>
+<p>For the case when we want to build a transition table for a whole corpus I have written the function below. One can simply concatenate the sequences of transitions for the documents in the corpus into a single sequence before using that to construct the transition table.</p>
 
 <div class="highlight"><pre><code class="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">corpus-transitions</span>
-  <span class="p">([</span><span class="nv">corpus</span><span class="p">]</span> <span class="p">(</span><span class="nf">corpus-transitions</span> <span class="nv">corpus</span> <span class="mi">1</span><span class="p">))</span>
   <span class="p">([</span><span class="nv">corpus</span> <span class="nv">n</span><span class="p">]</span>
-     <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">corpus</span>
-          <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nf">collect-transitions</span> <span class="nv">%</span> <span class="nv">n</span><span class="p">))</span>
-          <span class="p">(</span><span class="nb">reduce </span><span class="nv">tt/concat-tt</span><span class="p">))))</span></code></pre></div>
+      <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">corpus</span>
+           <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nf">col-transitions</span> <span class="nv">%</span> <span class="nv">n</span><span class="p">))</span>
+           <span class="p">(</span><span class="nb">apply </span><span class="nv">concat</span><span class="p">)</span>
+           <span class="p">(</span><span class="nf">make-transition-table</span><span class="p">)))</span>
+  <span class="p">([</span><span class="nv">corpus</span><span class="p">]</span> <span class="p">(</span><span class="nf">corpus-transitions</span> <span class="nv">corpus</span> <span class="mi">1</span><span class="p">)))</span></code></pre></div>
 
 <h2 id="generating-the-sequence">Generating the Sequence</h2>
 <p>Now we’ve built the transition table we can now generate our sequences of tokens. In addition to the transition table, the below function takes a vector of first <script type="math/tex">n</script> tokens for the sequence (the initialization sequence) from which we can generate the subsequent items in the sequence using the transition table.</p>
