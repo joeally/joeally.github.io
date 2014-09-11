@@ -7,7 +7,7 @@
     <atom:link href="http://joeally.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>Markov Sequences: Storing the Transition Tables on Redis</title>
+        <title>Markov Sequences: Storing the Transition Tables on Redis (Part 4)</title>
         <description>&lt;p&gt;In this post I will demonstrate how one could store their transition table on the &lt;a href=&quot;http://redis.io/&quot;&gt;Redis&lt;/a&gt; key value store.&lt;/p&gt;
 
 &lt;h2 id=&quot;why-redis&quot;&gt;Why Redis?&lt;/h2&gt;
